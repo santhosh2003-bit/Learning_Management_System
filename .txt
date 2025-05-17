@@ -1,0 +1,2 @@
+first keep track of the current video if paused or closed then changed timeStamp and enable in localStorage. then when u come back to the website enable from localStorage and seek to there.
+https://www.npmjs.com/package/react-player
