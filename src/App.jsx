@@ -1,36 +1,22 @@
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Landing from "./pages/Landing/Landing";
-import { AuthProvider, useAuth } from "./Context/AuthContext/AuthContext";
-import AdminLogin from "./pages/AdminFiles/AdminLogin/AdminLogin";
+import { AuthProvider } from "./Context/AuthContext/AuthContext";
 import FacultyLogin from "./pages/FacultyFiles/FacultyLogin/FacultyLogin";
-import Admin from "./pages/AdminFiles/Admin/Admin";
 import FacultyDashboard from "./pages/FacultyFiles/FacultyDashboard/FacultyDashboard";
 import UploadVideo from "./pages/VideoUpload/VideoUpload";
 import UploadedContent from "./pages/VideoContent/VideoContent";
 import AdminDashboard from "./pages/AdminFiles/AdminDashboard/AdminDashboard";
-import FacultyManagement from "./pages/AdminFiles/FacultyManagement/FacultyManagement";
-import StudentLogin from "./pages/StudentLogin/StudentLogin";
-import StudentManagement from "./pages/AdminFiles/StudentManagement/StudentManagement";
 import StudentDashboard from "./pages/StudentDashboard/StudentDashboard";
-import OpenedVideo from "./pages/OpenedVideo/OpenedVideo";
-
-import Register from "./pages/Registeration/Register";
 import TestPage from "./TestPage";
 import ResultsPage from "./ResultsPage";
 import FacultyCard from "./FacultyCard";
-
-const ProtectedRoute = ({ role, children }) => {
-  const { token, role: userRole } = useAuth();
-  if (!token || (role && userRole !== role)) {
-    return <Navigate to="/" />;
-  }
-  return children;
-};
+import Protected from "./ProtectedRoutes/Protected";
+import AdminProtected from "./ProtectedRoutes/AdminProtected";
+import FacultyProtected from "./ProtectedRoutes/FacultyProtected";
+import Videos from "./pages/AdminFiles/Admin/Videos";
+import User from "./pages/AdminFiles/Admin/User";
+import AdminFaculty from "./pages/AdminFiles/Admin/AdminFaculty";
+import AdminUploadContent from "./pages/AdminFiles/Admin/AdminUploadContent";
 
 const App = () => {
   return (
@@ -38,91 +24,66 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/auth/register" element={<Register />} />
           {/* <Route path="/admin-login" element={<AdminLogin />} /> */}
           <Route path="/auth/login" element={<FacultyLogin />} />
-          <Route
+          {/* <Route
             path="/admin"
-            element={
-              <ProtectedRoute role="admin">
-                <Admin />
-              </ProtectedRoute>
-            }
-          />
-          <Route
+            element={<Protected Component={<Admin/>}/>}
+          /> */}
+          {/* <Route
             path="/admin/faculty-data"
             element={
-              <ProtectedRoute role="admin">
-                <FacultyManagement />
-              </ProtectedRoute>
+              <Protected Component={ <FacultyManagement />}/>
             }
-          />
+          /> */}
           <Route
             path="/admin-dashboard"
-            element={
-              <ProtectedRoute role="admin">
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
+            element={<AdminProtected Component={<AdminDashboard />} />}
           />
           <Route
             path="/faculty-dashboard"
-            element={
-              <ProtectedRoute role="faculty">
-                <FacultyDashboard />
-              </ProtectedRoute>
-            }
+            element={<FacultyProtected Component={<FacultyDashboard />} />}
           />
           <Route
             path="/upload-video"
-            element={
-              <ProtectedRoute role="faculty">
-                <UploadVideo />
-              </ProtectedRoute>
-            }
+            element={<FacultyProtected Component={<UploadVideo />} />}
           />
           <Route
             path="/uploaded-content"
-            element={
-              <ProtectedRoute role="faculty">
-                <FacultyCard/>
-              </ProtectedRoute>
-            }
+            element={<FacultyProtected Component={<FacultyCard />} />}
           />
-          <Route path="/student-login" element={<StudentLogin />} />
-          <Route path="/student-management" element={<StudentManagement />} />
           <Route
             path="/student-dashboard"
-            element={
-              <ProtectedRoute>
-                <StudentDashboard />
-              </ProtectedRoute>
-            }
+            element={<Protected Component={<StudentDashboard />} />}
           />
-          <Route path="/student-dashboard/:id" element={<OpenedVideo />} />
+          {/* <Route path="/student-dashboard/:id" element={<OpenedVideo />} /> */}
           <Route
             path="/course/:id"
-            element={
-              <ProtectedRoute role="student">
-                <UploadedContent />
-              </ProtectedRoute>
-            }
+            element={<Protected Component={<UploadedContent />} />}
           />
           <Route
             path="/test/:testId"
-            element={
-              <ProtectedRoute role="student">
-                <TestPage />
-              </ProtectedRoute>
-            }
+            element={<Protected Component={<TestPage />} />}
           />
           <Route
             path="/results"
-            element={
-              <ProtectedRoute role="student">
-                <ResultsPage />
-              </ProtectedRoute>
-            }
+            element={<Protected Component={<ResultsPage />} />}
+          />
+          <Route
+            path="/view/all/videos"
+            element={<AdminProtected Component={<Videos />} />}
+          />
+          <Route
+            path="/view-students"
+            element={<AdminProtected Component={<User />} />}
+          />
+          <Route
+            path="/view-faculty"
+            element={<AdminProtected Component={<AdminFaculty />} />}
+          />
+          <Route
+            path="/upload-admin"
+            element={<AdminProtected Component={<AdminUploadContent />} />}
           />
         </Routes>
       </Router>
